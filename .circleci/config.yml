@@ -8,8 +8,85 @@ jobs:
       - run: find .
       - run: dotnet build src
       - run: dotnet test src/BasketApi.Tests
+      - persist_to_workspace:
+          root: BasketApi
+          paths: .
+  build-api-image:  
+    docker:
+      - image: circleci/python:3.6.1
+    environment: 
+      AWS_ACCOUNT_ID: 882493294761
+      AWS_RESOURCE_NAME_PREFIX: basketapi
+      AWS_DEFAULT_REGION: eu-central-1
+    steps:
+      - attach_workspace:
+          at: .
+      - run: find .
+      - run:
+          name: Setup common environment variables
+          command: |
+            echo 'export ECR_REPOSITORY_NAME="${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
+            echo 'export FULL_IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY_NAME}:${CIRCLE_SHA1}"' >> $BASH_ENV
+      - setup_remote_docker
+      - run:
+          name: Build image
+          command: |
+            docker build -t $FULL_IMAGE_NAME .
+      - run:
+          name: Save image to an archive
+          command: |
+            mkdir docker-image
+            docker save -o docker-image/image.tar $FULL_IMAGE_NAME
+      - persist_to_workspace:
+          root: .
+          paths: ./deploy
+  deploy-api:  
+    docker:
+      - image: circleci/python:3.6.1
+    environment:
+      AWS_DEFAULT_OUTPUT: json
+      AWS_ACCOUNT_ID: 882493294761
+      AWS_RESOURCE_NAME_PREFIX: basketapi
+      AWS_DEFAULT_REGION: eu-central-1
+    steps:
+      - attach_workspace:
+          at: .
+      - run: find .
+      - restore_cache:
+          key: v1-{{ checksum "deploy/deploy-venv-requirements.txt" }}
+      - run:
+          name: Install awscli
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r deploy/deploy-venv-requirements.txt
+      - save_cache:
+          key: v1-{{ checksum "deploy/deploy-venv-requirements.txt" }}
+          paths:
+            - "venv"
+      - run:
+          name: Setup common environment variables
+          command: |
+            echo 'export ECR_REPOSITORY_NAME="${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
+      - setup_remote_docker
+      - run:
+          name: Load image
+          command: |
+            docker load --input docker-image/image.tar
+      - run:
+          name: Push image
+          command: |
+            . venv/bin/activate
+            eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+            docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY_NAME:$CIRCLE_SHA1
 workflows:
   version: 2
   api:
     jobs:
       - build-api
+      - build-api-image:
+          requires:
+            - build-api
+      - deploy-api:
+          requires:
+            - build-api-image
