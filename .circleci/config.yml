@@ -15,7 +15,7 @@ jobs:
     docker:
       - image: circleci/python:3.6.1
     environment: 
-      AWS_ACCOUNT_ID: 882493294761
+      AWS_ACCOUNT_ID: "882493294761"
       AWS_RESOURCE_NAME_PREFIX: basketapi
       AWS_DEFAULT_REGION: eu-central-1
     steps:
@@ -45,7 +45,7 @@ jobs:
       - image: circleci/python:3.6.1
     environment:
       AWS_DEFAULT_OUTPUT: json
-      AWS_ACCOUNT_ID: 882493294761
+      AWS_ACCOUNT_ID: "882493294761"
       AWS_RESOURCE_NAME_PREFIX: basketapi
       AWS_DEFAULT_REGION: eu-central-1
     steps:
