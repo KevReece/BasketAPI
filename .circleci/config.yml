@@ -72,7 +72,7 @@ jobs:
       - run:
           name: Load image
           command: |
-            docker load --input deploy/docker-image.tar
+            docker load --input docker-image.tar
       - run:
           name: Push image
           command: |
