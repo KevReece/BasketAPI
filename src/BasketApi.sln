@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2048
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasketApi", "BasketApi\BasketApi.csproj", "{B90B5F32-5C37-4132-B108-D8A3EEA9BFED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasketApi", "BasketApi\BasketApi.csproj", "{B90B5F32-5C37-4132-B108-D8A3EEA9BFED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasketApi.Tests", "BasketApi.Tests\BasketApi.Tests.csproj", "{0243F855-4DB8-43BA-9671-83E5A7579D77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{B90B5F32-5C37-4132-B108-D8A3EEA9BFED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B90B5F32-5C37-4132-B108-D8A3EEA9BFED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B90B5F32-5C37-4132-B108-D8A3EEA9BFED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0243F855-4DB8-43BA-9671-83E5A7579D77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0243F855-4DB8-43BA-9671-83E5A7579D77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0243F855-4DB8-43BA-9671-83E5A7579D77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0243F855-4DB8-43BA-9671-83E5A7579D77}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

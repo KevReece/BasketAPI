@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BasketApi
@@ -9,6 +8,7 @@ namespace BasketApi
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
         }
         
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -17,11 +17,13 @@ namespace BasketApi
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.Run(async (context) =>
+            else
             {
-                await context.Response.WriteAsync("Hello World!");
-            });
+                app.UseHsts();
+            }
+
+            app.UseMvc();
+            app.UseHttpsRedirection();
         }
     }
 }
