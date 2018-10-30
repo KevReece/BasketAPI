@@ -1,25 +1,29 @@
 Basket API
 ===
+
 Description
 ---
 This is a demo API, demonstrating a basic in-memory basket.
+
 Usage
 ---
-###Without client
+### Without client
 TODO: Swagger info
-###With client
+### With client
 TODO: NuGet package and SpecFlow usage
+
 Assumptions
 ---
 - API security is out of scope
 - Client integration is made using a NuGet client package
+
 Development
 ---
-###Setup
+### Setup
 TODO: Any manual steps
-###Guidelines
+### Guidelines
 TODO: notes for development/testing/deployment
-###TODO
+### TODO
 - Get basket item (.Net Core)
 - CI run test
 - Local Docker build and run
