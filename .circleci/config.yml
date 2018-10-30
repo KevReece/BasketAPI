@@ -9,7 +9,7 @@ jobs:
       - run: dotnet build src
       - run: dotnet test src/BasketApi.Tests
       - persist_to_workspace:
-          root: BasketApi
+          root: src/BasketApi
           paths: .
   build-api-image:  
     docker:
@@ -38,8 +38,8 @@ jobs:
             mkdir docker-image
             docker save -o docker-image/image.tar $FULL_IMAGE_NAME
       - persist_to_workspace:
-          root: .
-          paths: ./deploy
+          root: deploy
+          paths: .
   deploy-api:  
     docker:
       - image: circleci/python:3.6.1
@@ -53,15 +53,15 @@ jobs:
           at: .
       - run: find .
       - restore_cache:
-          key: v1-{{ checksum "deploy/deploy-venv-requirements.txt" }}
+          key: v1-{{ checksum "deploy-venv-requirements.txt" }}
       - run:
           name: Install awscli
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install -r deploy/deploy-venv-requirements.txt
+            pip install -r deploy-venv-requirements.txt
       - save_cache:
-          key: v1-{{ checksum "deploy/deploy-venv-requirements.txt" }}
+          key: v1-{{ checksum "deploy-venv-requirements.txt" }}
           paths:
             - "venv"
       - run:
