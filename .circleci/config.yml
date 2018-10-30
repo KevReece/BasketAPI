@@ -7,7 +7,7 @@ jobs:
       - checkout
       - run: find .
       - run: dotnet build src
-      - run: dotnet test arc/BasketApi.Tests
+      - run: dotnet test src/BasketApi.Tests
 workflows:
   version: 2
   api:
