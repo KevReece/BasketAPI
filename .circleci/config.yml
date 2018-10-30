@@ -6,8 +6,8 @@ jobs:
     steps:
       - checkout
       - run: find .
-      - run: dotnet build
-      - run: dotnet test BasketApi.Tests
+      - run: dotnet build src
+      - run: dotnet test arc/BasketApi.Tests
 workflows:
   version: 2
   api:
