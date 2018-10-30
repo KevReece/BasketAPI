@@ -1,0 +1,15 @@
+version: 2
+jobs:
+  build-api:  
+    docker:
+      - image: microsoft/dotnet:2.1-sdk
+    steps:
+      - checkout
+      - run: find .
+      - run: dotnet build
+      - run: dotnet test BasketApi.Tests
+workflows:
+  version: 2
+  api:
+    jobs:
+      - build-api
