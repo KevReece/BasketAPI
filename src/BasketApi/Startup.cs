@@ -23,6 +23,7 @@ namespace BasketApi
             {
                 Title = "BasketApi",
                 Description = "In memory basket functionality",
+                Version = "v1"
             };  
             options.SwaggerDoc("v1", info);
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
