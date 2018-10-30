@@ -25,7 +25,7 @@ namespace BasketApi
                 Description = "In memory basket functionality",
             };  
             options.SwaggerDoc("v1", info);
-            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
             if (File.Exists(xmlPath))
             {
