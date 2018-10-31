@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using BasketApi.Models;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -26,89 +27,89 @@ namespace BasketApi.Tests.IntegrationTests
         }
 
         [TestMethod]
-        public void PostBasketReturnsId()
+        public async Task PostBasketReturnsId()
         {
-            var response = testClientFactory.Create().PostAsync("Basket", null).Result;
+            var response = await testClientFactory.Create().PostAsync("Basket", null);
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var stringResponse = response.Content.ReadAsStringAsync().Result;
+            var stringResponse = await response.Content.ReadAsStringAsync();
             response.IsSuccessStatusCode.Should().BeTrue();
             stringResponse.Should().NotBeNullOrWhiteSpace();
         }
 
         [TestMethod]
-        public void GetsBasket()
+        public async Task GetsBasket()
         {
-            var basketId = SetupBasketId();
+            var basketId = await SetupBasketId();
 
-            var response = testClientFactory.Create().GetAsync($"Basket/{basketId}").Result;
+            var response = await testClientFactory.Create().GetAsync($"Basket/{basketId}");
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var stringResponse = response.Content.ReadAsStringAsync().Result;
+            var stringResponse = await response.Content.ReadAsStringAsync();
             response.IsSuccessStatusCode.Should().BeTrue();
             stringResponse.Should().NotBeNullOrWhiteSpace();
         }
 
         [TestMethod]
-        public void GetsUnknownBasketAsNotFound()
+        public async Task GetsUnknownBasketAsNotFound()
         {
-            var response = testClientFactory.Create().GetAsync("Basket/unknown").Result;
+            var response = await testClientFactory.Create().GetAsync("Basket/unknown");
 
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [TestMethod]
-        public void PutsBasketItems()
+        public async Task PutsBasketItems()
         {
-            var basketId = SetupBasketId();
+            var basketId = await SetupBasketId();
             var item = new Item{Id = "AnItemId", Quantity = 1};
 
-            var response = testClientFactory.Create().PutAsync($"Basket/{basketId}/Item/{item.Id}", BuildJsonContent(item)).Result;
+            var response = await testClientFactory.Create().PutAsync($"Basket/{basketId}/Item/{item.Id}", BuildJsonContent(item));
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
         [TestMethod]
-        public void PutFailsAsBadRequest()
+        public async Task PutFailsAsBadRequest()
         {
-            var response = testClientFactory.Create().PutAsync("Basket/unknown/Item/AnItemId/", BuildJsonContent(null)).Result;
+            var response = await testClientFactory.Create().PutAsync("Basket/unknown/Item/AnItemId/", BuildJsonContent(null));
 
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         [TestMethod]
-        public void DeletesBasketItem()
+        public async Task DeletesBasketItem()
         {
-            var basketId = SetupBasketId();
+            var basketId = await SetupBasketId();
             var item = new Item { Id = "AnItemId", Quantity = 1 };
-            var putResponse = testClientFactory.Create().PutAsync($"Basket/{basketId}/Item/{item.Id}", BuildJsonContent(item)).Result;
+            await testClientFactory.Create().PutAsync($"Basket/{basketId}/Item/{item.Id}", BuildJsonContent(item));
 
-            var response = testClientFactory.Create().DeleteAsync($"Basket/{basketId}/Item/{item.Id}").Result;
+            var response = await testClientFactory.Create().DeleteAsync($"Basket/{basketId}/Item/{item.Id}");
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
         [TestMethod]
-        public void DeletesUnknownBasketItemsAsNotFound()
+        public async Task DeletesUnknownBasketItemsAsNotFound()
         {
-            var response = testClientFactory.Create().DeleteAsync("Basket/unknown/Item/unknownItem").Result;
+            var response = await testClientFactory.Create().DeleteAsync("Basket/unknown/Item/unknownItem");
 
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [TestMethod]
-        public void DeletesAllBasketItems()
+        public async Task DeletesAllBasketItems()
         {
-            var basketId = SetupBasketId();
+            var basketId = await SetupBasketId();
 
-            var response = testClientFactory.Create().DeleteAsync($"Basket/{basketId}/Item/").Result;
+            var response = await testClientFactory.Create().DeleteAsync($"Basket/{basketId}/Item/");
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
-        private static string SetupBasketId()
+        private static async Task<string> SetupBasketId()
         {
-            return testClientFactory.Create().PostAsync("Basket", null).Result.Content.ReadAsStringAsync().Result;
+            return await (await testClientFactory.Create().PostAsync("Basket", null)).Content.ReadAsStringAsync();
         }
 
         private static StringContent BuildJsonContent(Item item)

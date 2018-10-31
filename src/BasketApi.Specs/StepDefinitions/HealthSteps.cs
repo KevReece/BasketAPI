@@ -1,4 +1,5 @@
-﻿using TechTalk.SpecFlow;
+﻿using System.Threading.Tasks;
+using TechTalk.SpecFlow;
 
 namespace BasketApi.Specs.StepDefinitions
 {
@@ -13,9 +14,9 @@ namespace BasketApi.Specs.StepDefinitions
         }
         
         [When(@"I request GET health")]
-        public void WhenIRequestGETHealth()
+        public async Task WhenIRequestGETHealth()
         {
-            apiContext.StringResponse = apiContext.Client.GetAsync().Result;
+            apiContext.StringResponse = await apiContext.Client.GetAsync();
         }
     }
 }

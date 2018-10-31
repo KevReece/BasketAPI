@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Threading.Tasks;
+using FluentAssertions;
 using TechTalk.SpecFlow;
 
 namespace BasketApi.Specs.StepDefinitions
@@ -20,9 +21,9 @@ namespace BasketApi.Specs.StepDefinitions
         }
 
         [Then(@"my new basket should be saved")]
-        public void ThenMyNewBasketShouldBeSaved()
+        public async Task ThenMyNewBasketShouldBeSaved()
         {
-            var savedBasket = apiContext.Client.BasketByIdGetAsync(apiContext.StringResponse).Result;
+            var savedBasket = await apiContext.Client.BasketByIdGetAsync(apiContext.StringResponse);
             savedBasket.Id.Should().Be(apiContext.StringResponse);
         }
 
@@ -33,28 +34,28 @@ namespace BasketApi.Specs.StepDefinitions
         }
 
         [Then(@"my basket should have the ""(.*)"" item")]
-        public void ThenMyBasketShouldHaveTheItem(string itemId)
+        public async Task ThenMyBasketShouldHaveTheItem(string itemId)
         {
-            apiContext.Client.BasketByIdGetAsync(apiContext.BasketId).Result.Items.Keys.Should().Contain(itemId);
+            (await apiContext.Client.BasketByIdGetAsync(apiContext.BasketId)).Items.Keys.Should().Contain(itemId);
         }
 
         [Then(@"my basket should have the new ""(.*)"" quantity")]
-        public void ThenMyBasketShouldHaveTheNewQuantity(string itemId)
+        public async Task ThenMyBasketShouldHaveTheNewQuantity(string itemId)
         {
-            var item = apiContext.Client.BasketByIdGetAsync(apiContext.BasketId).Result.Items[itemId];
+            var item = (await apiContext.Client.BasketByIdGetAsync(apiContext.BasketId)).Items[itemId];
             item.Quantity.Should().Be(100);
         }
 
         [Then(@"my basket should not have the ""(.*)"" item")]
-        public void ThenMyBasketShouldNotHaveTheItem(string itemId)
+        public async Task ThenMyBasketShouldNotHaveTheItem(string itemId)
         {
-            apiContext.Client.BasketByIdGetAsync(apiContext.BasketId).Result.Items.Keys.Should().NotContain(itemId);
+            (await apiContext.Client.BasketByIdGetAsync(apiContext.BasketId)).Items.Keys.Should().NotContain(itemId);
         }
 
         [Then(@"my basket should be empty")]
-        public void ThenMyBasketShouldBeEmpty()
+        public async Task ThenMyBasketShouldBeEmpty()
         {
-            apiContext.Client.BasketByIdGetAsync(apiContext.BasketId).Result.Items.Should().BeEmpty();
+            (await apiContext.Client.BasketByIdGetAsync(apiContext.BasketId)).Items.Should().BeEmpty();
         }
     }
 }

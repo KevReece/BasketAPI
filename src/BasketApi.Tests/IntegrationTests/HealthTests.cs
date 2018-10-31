@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -22,12 +23,12 @@ namespace BasketApi.Tests.IntegrationTests
         }
 
         [TestMethod]
-        public void GetsHealth()
+        public async Task GetsHealth()
         {
-            var response = testClientFactory.Create().GetAsync("").Result;
+            var response = await testClientFactory.Create().GetAsync("");
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var stringResponse = response.Content.ReadAsStringAsync().Result;
+            var stringResponse = await response.Content.ReadAsStringAsync();
             stringResponse.Should().Contain("Healthy");
         }
     }
