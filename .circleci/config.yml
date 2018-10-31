@@ -104,11 +104,12 @@ jobs:
     steps:
       - checkout
       - run: find .
-      - run: dotnet build BasketApi.Client
-      - run: dotnet pack BasketApi.Client --no-build --output output /p:Version=1.0.${CIRCLE_BUILD_NUM}
+      - run: dotnet build src/BasketApi.Client
+      - run: dotnet pack src/BasketApi.Client --no-build --output output /p:Version=1.0.${CIRCLE_BUILD_NUM}
       - run: find .
       - store_artifacts:
-          path: BasketApi.Client/output
+          path: src/BasketApi.Client/output
+          destination: output
 workflows:
   version: 2
   api:
