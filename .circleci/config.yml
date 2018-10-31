@@ -98,6 +98,17 @@ jobs:
             ELB_ARN=$(aws elbv2 describe-target-groups --target-group-arns $TARGET_GROUP_ARN | jq -r '.TargetGroups[0].LoadBalancerArns[0]')
             ELB_DNS_NAME=$(aws elbv2 describe-load-balancers --load-balancer-arns $ELB_ARN | jq -r '.LoadBalancers[0].DNSName')
             curl --retry 10 http://$ELB_DNS_NAME/ | grep "Healthy"
+  publish-client:  
+    docker:
+      - image: microsoft/dotnet:2.1-sdk
+    steps:
+      - checkout
+      - run: find .
+      - run: dotnet build BasketApi.Client
+      - run: dotnet pack BasketApi.Client --no-build --output output /p:Version=1.0.${CIRCLE_BUILD_NUM}
+      - run: find .
+      - store_artifacts:
+          path: BasketApi.Client/output
 workflows:
   version: 2
   api:
@@ -109,3 +120,6 @@ workflows:
       - deploy-api:
           requires:
             - build-api
+      - publish-client:
+          requires:
+            - deploy-api
