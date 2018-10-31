@@ -26,6 +26,15 @@ namespace BasketApi.Specs.StepDefinitions
             await apiContext.Client.BasketByIdItemByItemIdPutAsync(apiContext.BasketId, itemId, new Item { Id = itemId, Quantity = 1 });
         }
 
+        [Given(@"I have a basket with items")]
+        public async void GivenIHaveABasketWithItems()
+        {
+            apiContext.BasketId = apiContext.Client.BasketPostAsync().Result;
+            await apiContext.Client.BasketByIdItemByItemIdPutAsync(apiContext.BasketId, "Apple", new Item { Id = "Apple", Quantity = 1 });
+            await apiContext.Client.BasketByIdItemByItemIdPutAsync(apiContext.BasketId, "Banana", new Item { Id = "Banana", Quantity = 2 });
+            await apiContext.Client.BasketByIdItemByItemIdPutAsync(apiContext.BasketId, "Cheese", new Item { Id = "Cheese", Quantity = 3 });
+        }
+
         [When(@"I GET my basket")]
         public void WhenIGETMyBasket()
         {
@@ -48,6 +57,18 @@ namespace BasketApi.Specs.StepDefinitions
         public async void WhenIPUTMyItemAsANewQuantityInMyBasket(string itemId)
         {
             await apiContext.Client.BasketByIdItemByItemIdPutAsync(apiContext.BasketId, itemId, new Item { Id = itemId, Quantity = 100 });
+        }
+
+        [When(@"I DELETE a ""(.*)"" item from my basket")]
+        public async void WhenIDELETEAItemFromMyBasket(string itemId)
+        {
+            await apiContext.Client.BasketByIdItemByItemIdDeleteAsync(apiContext.BasketId, itemId);
+        }
+
+        [When(@"I DELETE all items in my basket")]
+        public async void WhenIDELETEAllItemsInMyBasket()
+        {
+            await apiContext.Client.BasketByIdItemDeleteAsync(apiContext.BasketId);
         }
     }
 }

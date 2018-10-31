@@ -26,3 +26,15 @@ Scenario: Update item quantity
     And I have a basket with a "Banana" item
 	When I PUT my "Banana" item as a new quantity in my basket
 	Then my basket should have the new "Banana" quantity
+
+Scenario: Remove item from a basket
+	Given the API is running
+    And I have a basket with a "Banana" item
+	When I DELETE a "Banana" item from my basket
+	Then my basket should not have the "Banana" item
+
+Scenario: Clear a basket
+	Given the API is running
+    And I have a basket with items
+	When I DELETE all items in my basket
+	Then my basket should be empty

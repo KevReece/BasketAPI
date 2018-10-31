@@ -67,5 +67,38 @@ namespace BasketApi.Controllers
             }
             return Ok();
         }
+
+        /// <summary>
+        /// Deletes an item from a basket
+        /// </summary>
+        /// <param name="id">As returned from the initial Basket POST</param>
+        /// <param name="itemId">A unique identifier for the item type</param>
+        /// <returns>NotFound for: unknown basket ID or item ID</returns>
+        [HttpDelete]
+        [Route("Basket/{id}/item/{itemId}")]
+        public ActionResult DeleteItem(string id, string itemId)
+        {
+            if (basketService.DeleteItem(id, itemId))
+            {
+                return Ok();
+            }
+            return NotFound();
+        }
+
+        /// <summary>
+        /// Delete all items from a basket
+        /// </summary>
+        /// <param name="id">As returned from the initial Basket POST</param>
+        /// <returns>NotFound for: unknown basket ID</returns>
+        [HttpDelete]
+        [Route("Basket/{id}/item")]
+        public ActionResult DeleteItems(string id)
+        {
+            if (basketService.DeleteAllItems(id))
+            {
+                return Ok();
+            }
+            return NotFound();
+        }
     }
 }

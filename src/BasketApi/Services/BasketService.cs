@@ -42,5 +42,28 @@ namespace BasketApi.Services
                 basket.Items.Add(itemId, item);
             }
         }
+
+        public bool DeleteItem(string basketId, string itemId)
+        {
+            var basket = Get(basketId);
+            if (basket == null || !basket.Items.ContainsKey(itemId))
+            {
+                return false;
+            }
+
+            return basket.Items.Remove(itemId);
+        }
+
+        public bool DeleteAllItems(string basketId)
+        {
+            var basket = Get(basketId);
+            if (basket == null)
+            {
+                return false;
+            }
+
+            basket.Items.Clear();
+            return true;
+        }
     }
 }

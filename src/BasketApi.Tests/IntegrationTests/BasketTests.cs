@@ -60,9 +60,8 @@ namespace BasketApi.Tests.IntegrationTests
         {
             var basketId = SetupBasketId();
             var item = new Item{Id = "AnItemId", Quantity = 1};
-            var content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
 
-            var response = testClientFactory.Create().PutAsync($"Basket/{basketId}/Item/{item.Id}", content).Result;
+            var response = testClientFactory.Create().PutAsync($"Basket/{basketId}/Item/{item.Id}", BuildJsonContent(item)).Result;
 
             response.IsSuccessStatusCode.Should().BeTrue();
         }
@@ -70,16 +69,49 @@ namespace BasketApi.Tests.IntegrationTests
         [TestMethod]
         public void PutFailsAsBadRequest()
         {
-            var content = new StringContent(JsonConvert.SerializeObject(null), Encoding.UTF8, "application/json");
-
-            var response = testClientFactory.Create().PutAsync($"Basket/unknown/Item/AnItemId/", content).Result;
+            var response = testClientFactory.Create().PutAsync("Basket/unknown/Item/AnItemId/", BuildJsonContent(null)).Result;
 
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [TestMethod]
+        public void DeletesBasketItem()
+        {
+            var basketId = SetupBasketId();
+            var item = new Item { Id = "AnItemId", Quantity = 1 };
+            var putResponse = testClientFactory.Create().PutAsync($"Basket/{basketId}/Item/{item.Id}", BuildJsonContent(item)).Result;
+
+            var response = testClientFactory.Create().DeleteAsync($"Basket/{basketId}/Item/{item.Id}").Result;
+
+            response.IsSuccessStatusCode.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void DeletesUnknownBasketItemsAsNotFound()
+        {
+            var response = testClientFactory.Create().DeleteAsync("Basket/unknown/Item/unknownItem").Result;
+
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [TestMethod]
+        public void DeletesAllBasketItems()
+        {
+            var basketId = SetupBasketId();
+
+            var response = testClientFactory.Create().DeleteAsync($"Basket/{basketId}/Item/").Result;
+
+            response.IsSuccessStatusCode.Should().BeTrue();
         }
 
         private static string SetupBasketId()
         {
             return testClientFactory.Create().PostAsync("Basket", null).Result.Content.ReadAsStringAsync().Result;
+        }
+
+        private static StringContent BuildJsonContent(Item item)
+        {
+            return new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
         }
     }
 }

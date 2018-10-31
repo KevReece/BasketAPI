@@ -44,5 +44,17 @@ namespace BasketApi.Specs.StepDefinitions
             var item = apiContext.Client.BasketByIdGetAsync(apiContext.BasketId).Result.Items[itemId];
             item.Quantity.Should().Be(100);
         }
+
+        [Then(@"my basket should not have the ""(.*)"" item")]
+        public void ThenMyBasketShouldNotHaveTheItem(string itemId)
+        {
+            apiContext.Client.BasketByIdGetAsync(apiContext.BasketId).Result.Items.Keys.Should().NotContain(itemId);
+        }
+
+        [Then(@"my basket should be empty")]
+        public void ThenMyBasketShouldBeEmpty()
+        {
+            apiContext.Client.BasketByIdGetAsync(apiContext.BasketId).Result.Items.Should().BeEmpty();
+        }
     }
 }
