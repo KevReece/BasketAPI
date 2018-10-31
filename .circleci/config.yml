@@ -1,17 +1,17 @@
 version: 2
 jobs:
-  build-api:  
+  test-api:  
     docker:
       - image: microsoft/dotnet:2.1-sdk
     steps:
       - checkout
       - run: find .
-      - run: dotnet build src
+      - run: dotnet build src/BasketApi.Tests
       - run: dotnet test src/BasketApi.Tests
       - persist_to_workspace:
           root: src/BasketApi
           paths: .
-  build-api-image:  
+  build-api:  
     docker:
       - image: circleci/python:3.6.1
     environment: 
@@ -102,10 +102,10 @@ workflows:
   version: 2
   api:
     jobs:
-      - build-api
-      - build-api-image:
+      - test-api
+      - build-api:
           requires:
-            - build-api
+            - test-api
       - deploy-api:
           requires:
-            - build-api-image
+            - build-api
