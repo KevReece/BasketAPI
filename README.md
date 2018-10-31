@@ -14,9 +14,9 @@ This is a demo API, demonstrating a basic in-memory basket, with:
 Usage
 ---
 - The latest client NuGet package can be found in the build artifacts here: https://circleci.com/gh/KevReece/BasketAPI
-  - select the most recent green 'client-publish' build, then select 'Artifacts'
+  - select the most recent green 'publish-client' build, then select 'Artifacts'
   - download the displayed .nupkg artifact, and add it as a NuGet source for your project
-- You can use the SwaggerUI to get detail on the API interface: http://ec2co-ecsel-1xleu2ezu8ts0-2052958683.eu-central-1.elb.amazonaws.com/swagger/index.html
+- You can use the live SwaggerUI to get detail on the API interface: http://ec2co-ecsel-1xleu2ezu8ts0-2052958683.eu-central-1.elb.amazonaws.com/swagger/index.html
 - The specs show a working example of how to use the basket api client: https://github.com/KevReece/BasketAPI/blob/master/src/BasketApi.Specs/Basket.feature
 
 Assumptions
