@@ -6,8 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BasketApi.Controllers
 {
     /// <summary>
-    /// Main basket functionality
-    /// - Start with a POST to /Basket/ to create a new basket
+    /// Main basket functionality - Start with a POST to /Basket/ to create a new basket
     /// </summary>
     public class BasketController : Controller
     {

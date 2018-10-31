@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Net;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BasketApi.Tests.IntegrationTests
@@ -23,8 +24,10 @@ namespace BasketApi.Tests.IntegrationTests
         [TestMethod]
         public void GetsHealth()
         {
-            var stringResponse = testClientFactory.Create().GetAsync("").Result.Content.ReadAsStringAsync().Result;
+            var response = testClientFactory.Create().GetAsync("").Result;
 
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            var stringResponse = response.Content.ReadAsStringAsync().Result;
             stringResponse.Should().Contain("Healthy");
         }
     }

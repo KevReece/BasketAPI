@@ -30,6 +30,7 @@ namespace BasketApi.Tests.IntegrationTests
         {
             var response = testClientFactory.Create().PostAsync("Basket", null).Result;
 
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             var stringResponse = response.Content.ReadAsStringAsync().Result;
             response.IsSuccessStatusCode.Should().BeTrue();
             stringResponse.Should().NotBeNullOrWhiteSpace();
@@ -42,6 +43,7 @@ namespace BasketApi.Tests.IntegrationTests
 
             var response = testClientFactory.Create().GetAsync($"Basket/{basketId}").Result;
 
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             var stringResponse = response.Content.ReadAsStringAsync().Result;
             response.IsSuccessStatusCode.Should().BeTrue();
             stringResponse.Should().NotBeNullOrWhiteSpace();
@@ -63,7 +65,7 @@ namespace BasketApi.Tests.IntegrationTests
 
             var response = testClientFactory.Create().PutAsync($"Basket/{basketId}/Item/{item.Id}", BuildJsonContent(item)).Result;
 
-            response.IsSuccessStatusCode.Should().BeTrue();
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
         [TestMethod]
@@ -83,7 +85,7 @@ namespace BasketApi.Tests.IntegrationTests
 
             var response = testClientFactory.Create().DeleteAsync($"Basket/{basketId}/Item/{item.Id}").Result;
 
-            response.IsSuccessStatusCode.Should().BeTrue();
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
         [TestMethod]
@@ -101,7 +103,7 @@ namespace BasketApi.Tests.IntegrationTests
 
             var response = testClientFactory.Create().DeleteAsync($"Basket/{basketId}/Item/").Result;
 
-            response.IsSuccessStatusCode.Should().BeTrue();
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
         private static string SetupBasketId()
