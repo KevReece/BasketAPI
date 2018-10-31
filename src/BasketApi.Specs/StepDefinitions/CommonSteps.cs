@@ -23,7 +23,7 @@ namespace BasketApi.Specs.StepDefinitions
         [Then(@"the response should contain ""(.*)""")]
         public void ThenTheResponseShouldContain(string expectedResponse)
         {
-            apiContext.Response.Should().Contain(expectedResponse);
+            apiContext.StringResponse.Should().Contain(expectedResponse);
         }
     }
 }

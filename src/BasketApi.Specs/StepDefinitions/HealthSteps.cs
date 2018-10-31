@@ -15,7 +15,7 @@ namespace BasketApi.Specs.StepDefinitions
         [When(@"I request GET health")]
         public void WhenIRequestGETHealth()
         {
-            apiContext.Response = apiContext.Client.GetAsync().Result;
+            apiContext.StringResponse = apiContext.Client.GetAsync().Result;
         }
     }
 }

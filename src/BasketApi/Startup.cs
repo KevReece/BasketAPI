@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using BasketApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,8 +14,14 @@ namespace BasketApi
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            SetupDependencyInjections(services);
             services.AddMvc();
             services.AddSwaggerGen(ConfigureSwaggerGenerationSetup);
+        }
+
+        private static void SetupDependencyInjections(IServiceCollection services)
+        {
+            services.AddScoped<BasketService>();
         }
 
         private static void ConfigureSwaggerGenerationSetup(SwaggerGenOptions options)
@@ -26,6 +33,11 @@ namespace BasketApi
                 Version = "v1"
             };  
             options.SwaggerDoc("v1", info);
+            IncludeXmlCommentsInSwagger(options);
+        }
+
+        private static void IncludeXmlCommentsInSwagger(SwaggerGenOptions options)
+        {
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
             if (File.Exists(xmlPath))
@@ -47,7 +59,6 @@ namespace BasketApi
 
             app.UseMvc();
             app.UseHttpsRedirection();
-
             app.UseSwagger().UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BasketApi"));
         }
     }
