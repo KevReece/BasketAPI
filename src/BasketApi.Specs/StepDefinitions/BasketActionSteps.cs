@@ -1,15 +1,14 @@
 ﻿using DotNetCoreAwsDockerSwaggerWebpi.Client;
-using FluentAssertions;
 using TechTalk.SpecFlow;
 
 namespace BasketApi.Specs.StepDefinitions
 {
     [Binding]
-    public class BasketSteps
+    public class BasketActionSteps
     {
         private readonly ApiContext apiContext;
 
-        public BasketSteps(ApiContext apiContext)
+        public BasketActionSteps(ApiContext apiContext)
         {
             this.apiContext = apiContext;
         }
@@ -49,38 +48,6 @@ namespace BasketApi.Specs.StepDefinitions
         public async void WhenIPUTMyItemAsANewQuantityInMyBasket(string itemId)
         {
             await apiContext.Client.BasketByIdItemByItemIdPutAsync(apiContext.BasketId, itemId, new Item { Id = itemId, Quantity = 100 });
-        }
-
-        [Then(@"the response should contain my new basket ID")]
-        public void ThenTheResponseShouldContainMyNewBasketID()
-        {
-            apiContext.StringResponse.Should().NotBeNullOrWhiteSpace();
-        }
-
-        [Then(@"my new basket should be saved")]
-        public void ThenMyNewBasketShouldBeSaved()
-        {
-            var savedBasket = apiContext.Client.BasketByIdGetAsync(apiContext.StringResponse).Result;
-            savedBasket.Id.Should().Be(apiContext.StringResponse);
-        }
-
-        [Then(@"the response should contain my basket")]
-        public void ThenTheResponseShouldContainMyBasket()
-        {
-            apiContext.BasketResponse.Id.Should().Be(apiContext.BasketId);
-        }
-
-        [Then(@"my basket should have the ""(.*)"" item")]
-        public void ThenMyBasketShouldHaveTheItem(string itemId)
-        {
-            apiContext.Client.BasketByIdGetAsync(apiContext.BasketId).Result.Items.Keys.Should().Contain(itemId);
-        }
-
-        [Then(@"my basket should have the new ""(.*)"" quantity")]
-        public void ThenMyBasketShouldHaveTheNewQuantity(string itemId)
-        {
-            var item = apiContext.Client.BasketByIdGetAsync(apiContext.BasketId).Result.Items[itemId];
-            item.Quantity.Should().Be(100);
         }
     }
 }
